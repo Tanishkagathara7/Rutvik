@@ -14,6 +14,9 @@
     <title>@yield('title', 'Rutvik Khandhar • Web &amp; Mobile App Developer')</title>
     <link rel="sitemap" href="/sitemap-index.xml">
     <link rel="icon" type="image/svg+xml" href="/_astro/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=Oswald:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <link as="font" crossorigin rel="preload" href="/_astro/fonts/MangoGrotesque-Regular.woff2" type="font/woff2">
     <style>
         @font-face {font-weight: 400;font-style: regular;font-family: PP Neue Montreal;font-display: swap;src: url(/_astro/fonts/PPNeueMontreal-Book.woff2)}
@@ -32,6 +35,7 @@
     <script defer src="/_astro/js/t.js" data-website-id="f4c0eb39-f9d2-4f81-9094-95a98f58d211"></script>
     <link rel="stylesheet" href="/_astro/css/main.Di2mB4H3.css">
     <link rel="stylesheet" href="/_astro/css/main.FDROcKoS.css">
+    <link rel="stylesheet" href="/_astro/css/light-theme.css">
 </head>
 <body data-barba="wrapper">
     <div class="overlay-container overlay-container--over" aria-hidden="true">
@@ -63,5 +67,61 @@
     <div id="@yield('page_id')" data-barba="container" data-barba-namespace="@yield('namespace')">
         @yield('content')
     </div>
+
+    <script>
+        (function() {
+            function updateHeaderScroll() {
+                var headers = document.querySelectorAll('header');
+                var scrolled = window.scrollY > 20;
+                headers.forEach(function(h) {
+                    if (scrolled) {
+                        h.classList.add('is-scrolled');
+                    } else {
+                        h.classList.remove('is-scrolled');
+                    }
+                });
+            }
+            window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+            window.addEventListener('DOMContentLoaded', updateHeaderScroll);
+            updateHeaderScroll();
+
+            // Subtle, restrained creative parallax on hero backdrop
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                var heroSection = document.querySelector('.editorial-hero');
+                if (heroSection) {
+                    var geoDisc = heroSection.querySelector('.hero-geo-disc');
+                    var ribbonSvg = heroSection.querySelector('.hero-ribbon-svg');
+                    var sphereMid = heroSection.querySelector('.hero-sphere-accent--mid');
+                    var archLines = heroSection.querySelector('.hero-arch-lines');
+
+                    heroSection.addEventListener('mousemove', function(e) {
+                        var rect = heroSection.getBoundingClientRect();
+                        var relX = (e.clientX - rect.left) / rect.width - 0.5;
+                        var relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+                        if (geoDisc) {
+                            geoDisc.style.transform = 'translate(' + (25 + relX * 15) + '%, ' + (-52 + relY * 15) + '%)';
+                        }
+                        if (sphereMid) {
+                            sphereMid.style.transform = 'translate(' + (relX * 22) + 'px, ' + (relY * 22) + 'px)';
+                        }
+                        if (archLines) {
+                            archLines.style.transform = 'translateX(' + (relX * 10) + 'px)';
+                        }
+                        if (ribbonSvg) {
+                            ribbonSvg.style.transform = 'translate(' + (relX * 6) + 'px, ' + (relY * 6) + 'px)';
+                        }
+                    }, { passive: true });
+
+                    heroSection.addEventListener('mouseleave', function() {
+                        if (geoDisc) geoDisc.style.transform = 'translate(25%, -52%)';
+                        if (sphereMid) sphereMid.style.transform = 'translate(0px, 0px)';
+                        if (archLines) archLines.style.transform = 'translateX(0px)';
+                        if (ribbonSvg) ribbonSvg.style.transform = 'translate(0px, 0px)';
+                    });
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
